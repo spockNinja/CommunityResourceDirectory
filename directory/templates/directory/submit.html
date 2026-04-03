@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Submit an Organization – {{ config.COMMUNITY_NAME }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="mb-1">Submit an Organization</h1>
+        <p class="text-muted mb-4">
+            Know a local resource that should be listed in the <strong>{{ config.COMMUNITY_NAME }}</strong>?
+            Fill out the form below and our team will review it.
+        </p>
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        {% if field.name != 'services' %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                                {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors }}</div>
+                            {% endif %}
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Services Provided</label>
+                        <div class="border rounded p-3" style="max-height: 250px; overflow-y: auto;">
+                            {% for choice in form.services %}
+                            <div class="form-check">
+                                {{ choice.tag }}
+                                <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                    {{ choice.choice_label }}
+                                </label>
+                            </div>
+                            {% empty %}
+                            <p class="text-muted small mb-0">No services available yet.</p>
+                            {% endfor %}
+                        </div>
+                        {% if form.services.errors %}
+                            <div class="text-danger small mt-1">{{ form.services.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4">Submit for Review</button>
+                        <a href="{% url 'index' %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

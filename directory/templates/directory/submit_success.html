@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Submission Received – {{ config.COMMUNITY_NAME }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 text-center py-5">
+        <div class="mb-4" style="font-size: 4rem;">✅</div>
+        <h1 class="fw-bold mb-3">Thank You!</h1>
+        <p class="lead text-muted mb-4">
+            Your organization has been submitted to the
+            <strong>{{ config.COMMUNITY_NAME }}</strong> for review.
+            Once approved by our team, it will appear in the directory.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'index' %}" class="btn btn-primary">Back to Directory</a>
+            <a href="{% url 'submit' %}" class="btn btn-outline-secondary">Submit Another</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
