@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.COMMUNITY_NAME }} – Resource Directory{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-5 fw-bold">{{ config.COMMUNITY_NAME }}</h1>
+        <p class="lead text-muted">Find local organizations and services in your community.</p>
+        <a href="{% url 'submit' %}" class="btn btn-primary">Submit an Organization</a>
+    </div>
+</div>
+
+{% if category_data %}
+    {% for item in category_data %}
+    <section class="mb-5">
+        <h2 class="category-header mb-3">{{ item.category.name }}</h2>
+        {% for svc in item.services %}
+        <div class="mb-4">
+            <h5>
+                <span class="badge service-badge text-white me-2">{{ svc.service.name }}</span>
+            </h5>
+            <div class="row g-3">
+                {% for org in svc.organizations %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="card-title fw-bold">{{ org.name }}</h6>
+                            {% if org.address %}
+                            <p class="card-text small mb-1">
+                                <i class="text-muted">📍</i> {{ org.address }}
+                            </p>
+                            {% endif %}
+                            {% if org.phone %}
+                            <p class="card-text small mb-1">
+                                <i class="text-muted">📞</i>
+                                <a href="tel:{{ org.phone }}">{{ org.phone }}</a>
+                            </p>
+                            {% endif %}
+                            {% if org.email %}
+                            <p class="card-text small mb-1">
+                                <i class="text-muted">✉️</i>
+                                <a href="mailto:{{ org.email }}">{{ org.email }}</a>
+                            </p>
+                            {% endif %}
+                            {% if org.website %}
+                            <p class="card-text small mb-1">
+                                <i class="text-muted">🌐</i>
+                                <a href="{{ org.website }}" target="_blank" rel="noopener noreferrer">{{ org.website }}</a>
+                            </p>
+                            {% endif %}
+                            {% if org.hours_of_operation %}
+                            <p class="card-text small mb-0">
+                                <i class="text-muted">🕐</i> {{ org.hours_of_operation }}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info">
+        No approved organizations are listed yet. Be the first to
+        <a href="{% url 'submit' %}">submit one</a>!
+    </div>
+{% endif %}
+
+{% if uncategorized %}
+<section class="mb-5">
+    <h2 class="category-header mb-3">Other Organizations</h2>
+    <div class="row g-3">
+        {% for org in uncategorized %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title fw-bold">{{ org.name }}</h6>
+                    {% if org.address %}
+                    <p class="card-text small mb-1"><i class="text-muted">📍</i> {{ org.address }}</p>
+                    {% endif %}
+                    {% if org.phone %}
+                    <p class="card-text small mb-1">
+                        <i class="text-muted">📞</i> <a href="tel:{{ org.phone }}">{{ org.phone }}</a>
+                    </p>
+                    {% endif %}
+                    {% if org.email %}
+                    <p class="card-text small mb-1">
+                        <i class="text-muted">✉️</i> <a href="mailto:{{ org.email }}">{{ org.email }}</a>
+                    </p>
+                    {% endif %}
+                    {% if org.website %}
+                    <p class="card-text small mb-1">
+                        <i class="text-muted">🌐</i>
+                        <a href="{{ org.website }}" target="_blank" rel="noopener noreferrer">{{ org.website }}</a>
+                    </p>
+                    {% endif %}
+                    {% if org.hours_of_operation %}
+                    <p class="card-text small mb-0"><i class="text-muted">🕐</i> {{ org.hours_of_operation }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}
