@@ -1,14 +1,21 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Development key only — replace with an environment variable in production
-SECRET_KEY = 'django-insecure-dev-key-for-community-resource-directory-app'
+# Load SECRET_KEY from environment; fall back to an insecure dev key for local use only.
+# Always set the SECRET_KEY environment variable in production.
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-dev-key-for-community-resource-directory-app',
+)
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# Restrict to specific domains in production
-ALLOWED_HOSTS = ['*']
+# In production set ALLOWED_HOSTS to your actual domain(s) via the environment variable.
+# Example: ALLOWED_HOSTS=example.com,www.example.com
+_allowed = os.environ.get('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = _allowed.split(',') if _allowed else (['*'] if DEBUG else [])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
