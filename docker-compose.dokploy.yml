@@ -1,0 +1,25 @@
+services:
+  web:
+    build: .
+    command: ["/app/entrypoint.sh"]
+    volumes:
+      - staticfiles:/app/staticfiles
+    ports:
+      - "8000:8000"
+    environment:
+      # Required: set these in Dokploy's environment variable dashboard
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: "False"
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      DB_ENGINE: django.db.backends.postgresql
+      DB_NAME: ${DB_NAME:-community_resource_directory}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
+      # Optional: number of gunicorn worker processes (default: 3)
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-3}
+    restart: unless-stopped
+
+volumes:
+  staticfiles:
