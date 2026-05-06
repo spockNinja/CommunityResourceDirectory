@@ -1,20 +1,4 @@
 services:
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: ${DB_NAME:-community_resource_directory}
-      POSTGRES_USER: ${DB_USER:-postgres}
-      # Required: set DB_PASSWORD in the Dokploy environment variables
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-
   web:
     build: .
     command: ["/app/entrypoint.sh"]
@@ -23,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      # Required: set SECRET_KEY, ALLOWED_HOSTS, and DB_PASSWORD in Dokploy env variables
+      # Required: set these in Dokploy's environment variable dashboard
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: "False"
       ALLOWED_HOSTS: ${ALLOWED_HOSTS}
@@ -31,15 +15,11 @@ services:
       DB_NAME: ${DB_NAME:-community_resource_directory}
       DB_USER: ${DB_USER:-postgres}
       DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: db
-      DB_PORT: "5432"
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
       # Optional: number of gunicorn worker processes (default: 3)
       GUNICORN_WORKERS: ${GUNICORN_WORKERS:-3}
-    depends_on:
-      db:
-        condition: service_healthy
     restart: unless-stopped
 
 volumes:
-  postgres_data:
   staticfiles:
