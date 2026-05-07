@@ -29,6 +29,7 @@ class Organization(models.Model):
     phone = models.CharField(max_length=50, blank=True)
     email = models.EmailField(blank=True)
     website = models.URLField(blank=True)
+    image = models.FileField(upload_to='organization_images/', blank=True)
     hours_of_operation = models.CharField(max_length=300, blank=True)
     services = models.ManyToManyField(Service, blank=True, related_name='organizations')
     approved = models.BooleanField(default=False)

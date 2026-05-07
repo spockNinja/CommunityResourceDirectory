@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import Category, Organization
 from .forms import OrganizationSubmitForm
 
@@ -29,7 +29,7 @@ def index(request):
 
 def submit(request):
     if request.method == 'POST':
-        form = OrganizationSubmitForm(request.POST)
+        form = OrganizationSubmitForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('submit_success')
@@ -41,3 +41,12 @@ def submit(request):
 
 def submit_success(request):
     return render(request, 'directory/submit_success.html')
+
+
+def organization_detail(request, organization_id):
+    organization = get_object_or_404(
+        Organization.objects.prefetch_related('services__category'),
+        pk=organization_id,
+        approved=True,
+    )
+    return render(request, 'directory/organization_detail.html', {'organization': organization})
