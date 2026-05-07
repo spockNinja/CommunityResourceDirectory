@@ -3,18 +3,18 @@
 {% block title %}Submission Received – {{ config.COMMUNITY_NAME }}{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6 text-center py-5">
-        <div class="mb-4" style="font-size: 4rem;">✅</div>
-        <h1 class="fw-bold mb-3">Thank You!</h1>
-        <p class="lead text-muted mb-4">
+<div class="flex justify-center">
+    <div class="max-w-lg w-full text-center py-16">
+        <div class="text-7xl mb-6">✅</div>
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-3">Thank You!</h1>
+        <p class="text-lg text-gray-500 mb-8">
             Your organization has been submitted to the
-            <strong>{{ config.COMMUNITY_NAME }}</strong> for review.
+            <strong class="text-gray-700">{{ config.COMMUNITY_NAME }}</strong> for review.
             Once approved by our team, it will appear in the directory.
         </p>
-        <div class="d-flex justify-content-center gap-3">
-            <a href="{% url 'index' %}" class="btn btn-primary">Back to Directory</a>
-            <a href="{% url 'submit' %}" class="btn btn-outline-secondary">Submit Another</a>
+        <div class="flex justify-center gap-4">
+            <a href="{% url 'index' %}" class="btn-primary-brand">Back to Directory</a>
+            <a href="{% url 'submit' %}" class="inline-block px-5 py-2 rounded-md border border-gray-300 text-gray-600 font-semibold hover:bg-gray-50 transition-colors">Submit Another</a>
         </div>
     </div>
 </div>
