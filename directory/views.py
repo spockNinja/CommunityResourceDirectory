@@ -43,10 +43,10 @@ def submit_success(request):
     return render(request, 'directory/submit_success.html')
 
 
-def organization_detail(request, organization_id):
+def organization_detail(request, organization_slug):
     organization = get_object_or_404(
         Organization.objects.prefetch_related('services__category'),
-        pk=organization_id,
+        slug=organization_slug,
         approved=True,
     )
     return render(request, 'directory/organization_detail.html', {'organization': organization})

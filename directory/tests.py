@@ -40,6 +40,9 @@ class ModelTests(TestCase):
     def test_organization_not_approved_by_default(self):
         self.assertFalse(self.org.approved)
 
+    def test_organization_slug_is_generated_from_name(self):
+        self.assertEqual(self.org.slug, 'test-org')
+
     def test_service_links_to_category(self):
         self.assertEqual(self.service.category, self.category)
 
@@ -71,6 +74,12 @@ class IndexViewTests(TestCase):
     def test_index_uses_constance_community_name(self):
         response = self.client.get(reverse('index'))
         self.assertContains(response, 'Community Resource Directory')
+
+    def test_index_links_to_organization_slug_detail(self):
+        approved = Organization.objects.create(name='Sluggy Org', approved=True)
+        approved.services.add(self.service)
+        response = self.client.get(reverse('index'))
+        self.assertContains(response, reverse('organization_detail', args=[approved.slug]))
 
 
 class SubmitViewTests(TestCase):
@@ -142,12 +151,18 @@ class OrganizationDetailViewTests(TestCase):
         self.unapproved_org = Organization.objects.create(name='Pending Org', approved=False)
 
     def test_approved_organization_detail_loads(self):
-        response = self.client.get(reverse('organization_detail', args=[self.approved_org.id]))
+        response = self.client.get(reverse('organization_detail', args=[self.approved_org.slug]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Approved Clinic')
         self.assertContains(response, '123 Main St')
         self.assertContains(response, 'Clinic')
 
     def test_unapproved_organization_detail_returns_404(self):
-        response = self.client.get(reverse('organization_detail', args=[self.unapproved_org.id]))
+        response = self.client.get(reverse('organization_detail', args=[self.unapproved_org.slug]))
         self.assertEqual(response.status_code, 404)
+
+    def test_organization_slug_collision_gets_suffix(self):
+        first = Organization.objects.create(name='Duplicate Name')
+        second = Organization.objects.create(name='Duplicate Name')
+        self.assertEqual(first.slug, 'duplicate-name')
+        self.assertEqual(second.slug, 'duplicate-name-2')

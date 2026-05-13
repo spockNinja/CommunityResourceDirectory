@@ -22,7 +22,7 @@
                 {% for org in svc.organizations %}
                 <div class="bg-white rounded-lg shadow hover:shadow-md transition-shadow p-4 flex flex-col">
                     <h4 class="font-bold text-gray-800 mb-2">
-                        <a href="{% url 'organization_detail' org.id %}" class="text-primary-brand hover:underline">{{ org.name }}</a>
+                        <a href="{% url 'organization_detail' org.slug %}" class="text-primary-brand hover:underline">{{ org.name }}</a>
                     </h4>
                 </div>
                 {% endfor %}
@@ -45,7 +45,7 @@
         {% for org in uncategorized %}
         <div class="bg-white rounded-lg shadow hover:shadow-md transition-shadow p-4 flex flex-col">
             <h4 class="font-bold text-gray-800 mb-2">
-                <a href="{% url 'organization_detail' org.id %}" class="text-primary-brand hover:underline">{{ org.name }}</a>
+                <a href="{% url 'organization_detail' org.slug %}" class="text-primary-brand hover:underline">{{ org.name }}</a>
             </h4>
         </div>
         {% endfor %}
