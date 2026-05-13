@@ -43,6 +43,10 @@ class ModelTests(TestCase):
     def test_organization_slug_is_generated_from_name(self):
         self.assertEqual(self.org.slug, 'test-org')
 
+    def test_organization_slug_falls_back_for_non_slugifiable_name(self):
+        org = Organization.objects.create(name='!!!')
+        self.assertEqual(org.slug, 'organization')
+
     def test_service_links_to_category(self):
         self.assertEqual(self.service.category, self.category)
 

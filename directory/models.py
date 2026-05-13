@@ -45,12 +45,13 @@ class Organization(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base_slug = slugify(self.name)[:300] or 'organization'
+            slug_max_length = self._meta.get_field('slug').max_length
+            base_slug = slugify(self.name)[:slug_max_length] or 'organization'
             slug = base_slug
             suffix = 2
             while Organization.objects.filter(slug=slug).exclude(pk=self.pk).exists():
                 suffix_text = f'-{suffix}'
-                slug = f'{base_slug[:300 - len(suffix_text)]}{suffix_text}'
+                slug = f'{base_slug[:slug_max_length - len(suffix_text)]}{suffix_text}'
                 suffix += 1
             self.slug = slug
         super().save(*args, **kwargs)
