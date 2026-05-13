@@ -4,6 +4,8 @@ services:
     command: ["/app/entrypoint.sh"]
     volumes:
       - staticfiles:/app/staticfiles
+    networks:
+      - dokploy-network
     ports:
       - "8000:8000"
     environment:
@@ -23,3 +25,7 @@ services:
 
 volumes:
   staticfiles:
+
+networks:
+  dokploy-network:
+    external: true
