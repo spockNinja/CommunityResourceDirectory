@@ -14,12 +14,13 @@ class OrganizationSubmitForm(forms.ModelForm):
 
     class Meta:
         model = Organization
-        fields = ['name', 'address', 'phone', 'email', 'website', 'hours_of_operation', 'services']
+        fields = ['name', 'address', 'phone', 'email', 'website', 'image', 'hours_of_operation', 'services']
         widgets = {
             'name': forms.TextInput(attrs={'class': TAILWIND_INPUT_CLASSES}),
             'address': forms.TextInput(attrs={'class': TAILWIND_INPUT_CLASSES}),
             'phone': forms.TextInput(attrs={'class': TAILWIND_INPUT_CLASSES}),
             'email': forms.EmailInput(attrs={'class': TAILWIND_INPUT_CLASSES}),
             'website': forms.URLInput(attrs={'class': TAILWIND_INPUT_CLASSES}),
+            'image': forms.ClearableFileInput(attrs={'class': TAILWIND_INPUT_CLASSES, 'accept': 'image/*'}),
             'hours_of_operation': forms.TextInput(attrs={'class': TAILWIND_INPUT_CLASSES}),
         }

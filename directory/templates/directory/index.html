@@ -21,35 +21,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {% for org in svc.organizations %}
                 <div class="bg-white rounded-lg shadow hover:shadow-md transition-shadow p-4 flex flex-col">
-                    <h4 class="font-bold text-gray-800 mb-2">{{ org.name }}</h4>
-                    {% if org.address %}
-                    <p class="text-sm text-gray-600 mb-1">
-                        <span class="text-gray-400">📍</span> {{ org.address }}
-                    </p>
-                    {% endif %}
-                    {% if org.phone %}
-                    <p class="text-sm text-gray-600 mb-1">
-                        <span class="text-gray-400">📞</span>
-                        <a href="tel:{{ org.phone }}" class="text-primary-brand hover:underline">{{ org.phone }}</a>
-                    </p>
-                    {% endif %}
-                    {% if org.email %}
-                    <p class="text-sm text-gray-600 mb-1">
-                        <span class="text-gray-400">✉️</span>
-                        <a href="mailto:{{ org.email }}" class="text-primary-brand hover:underline">{{ org.email }}</a>
-                    </p>
-                    {% endif %}
-                    {% if org.website %}
-                    <p class="text-sm text-gray-600 mb-1">
-                        <span class="text-gray-400">🌐</span>
-                        <a href="{{ org.website }}" target="_blank" rel="noopener noreferrer" class="text-primary-brand hover:underline">{{ org.website }}</a>
-                    </p>
-                    {% endif %}
-                    {% if org.hours_of_operation %}
-                    <p class="text-sm text-gray-600 mt-auto pt-2">
-                        <span class="text-gray-400">🕐</span> {{ org.hours_of_operation }}
-                    </p>
-                    {% endif %}
+                    <h4 class="font-bold text-gray-800 mb-2">
+                        <a href="{% url 'organization_detail' org.slug %}" class="text-primary-brand hover:underline">{{ org.name }}</a>
+                    </h4>
                 </div>
                 {% endfor %}
             </div>
@@ -70,31 +44,9 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {% for org in uncategorized %}
         <div class="bg-white rounded-lg shadow hover:shadow-md transition-shadow p-4 flex flex-col">
-            <h4 class="font-bold text-gray-800 mb-2">{{ org.name }}</h4>
-            {% if org.address %}
-            <p class="text-sm text-gray-600 mb-1"><span class="text-gray-400">📍</span> {{ org.address }}</p>
-            {% endif %}
-            {% if org.phone %}
-            <p class="text-sm text-gray-600 mb-1">
-                <span class="text-gray-400">📞</span>
-                <a href="tel:{{ org.phone }}" class="text-primary-brand hover:underline">{{ org.phone }}</a>
-            </p>
-            {% endif %}
-            {% if org.email %}
-            <p class="text-sm text-gray-600 mb-1">
-                <span class="text-gray-400">✉️</span>
-                <a href="mailto:{{ org.email }}" class="text-primary-brand hover:underline">{{ org.email }}</a>
-            </p>
-            {% endif %}
-            {% if org.website %}
-            <p class="text-sm text-gray-600 mb-1">
-                <span class="text-gray-400">🌐</span>
-                <a href="{{ org.website }}" target="_blank" rel="noopener noreferrer" class="text-primary-brand hover:underline">{{ org.website }}</a>
-            </p>
-            {% endif %}
-            {% if org.hours_of_operation %}
-            <p class="text-sm text-gray-600 mt-auto pt-2"><span class="text-gray-400">🕐</span> {{ org.hours_of_operation }}</p>
-            {% endif %}
+            <h4 class="font-bold text-gray-800 mb-2">
+                <a href="{% url 'organization_detail' org.slug %}" class="text-primary-brand hover:underline">{{ org.name }}</a>
+            </h4>
         </div>
         {% endfor %}
     </div>

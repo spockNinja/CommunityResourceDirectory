@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 
 class Category(models.Model):
@@ -25,10 +26,12 @@ class Service(models.Model):
 
 class Organization(models.Model):
     name = models.CharField(max_length=300)
+    slug = models.SlugField(max_length=320, unique=True)
     address = models.CharField(max_length=500, blank=True)
     phone = models.CharField(max_length=50, blank=True)
     email = models.EmailField(blank=True)
     website = models.URLField(blank=True)
+    image = models.FileField(upload_to='organization_images/', blank=True)
     hours_of_operation = models.CharField(max_length=300, blank=True)
     services = models.ManyToManyField(Service, blank=True, related_name='organizations')
     approved = models.BooleanField(default=False)
@@ -39,3 +42,16 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug_max_length = self._meta.get_field('slug').max_length
+            base_slug = slugify(self.name)[:slug_max_length] or 'organization'
+            slug = base_slug
+            suffix = 2
+            while Organization.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                suffix_text = f'-{suffix}'
+                slug = f'{base_slug[:slug_max_length - len(suffix_text)]}{suffix_text}'
+                suffix += 1
+            self.slug = slug
+        super().save(*args, **kwargs)

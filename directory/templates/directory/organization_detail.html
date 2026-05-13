@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}{{ organization.name }} – {{ config.COMMUNITY_NAME }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="mb-6">
+        <a href="{% url 'index' %}" class="text-primary-brand hover:underline">← Back to directory</a>
+    </div>
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-4">{{ organization.name }}</h1>
+
+        {% if organization.image %}
+        <img src="{{ organization.image.url }}" alt="{{ organization.name }}" class="w-full max-h-96 object-cover rounded-lg mb-5">
+        {% endif %}
+
+        <div class="space-y-3 text-gray-700">
+            {% if organization.address %}
+            <p><span class="font-semibold">Address:</span> {{ organization.address }}</p>
+            {% endif %}
+            {% if organization.phone %}
+            <p><span class="font-semibold">Phone:</span> <a href="tel:{{ organization.phone }}" class="text-primary-brand hover:underline">{{ organization.phone }}</a></p>
+            {% endif %}
+            {% if organization.email %}
+            <p><span class="font-semibold">Email:</span> <a href="mailto:{{ organization.email }}" class="text-primary-brand hover:underline">{{ organization.email }}</a></p>
+            {% endif %}
+            {% if organization.website %}
+            <p><span class="font-semibold">Website:</span> <a href="{{ organization.website }}" target="_blank" rel="noopener noreferrer" class="text-primary-brand hover:underline">{{ organization.website }}</a></p>
+            {% endif %}
+            {% if organization.hours_of_operation %}
+            <p><span class="font-semibold">Hours:</span> {{ organization.hours_of_operation }}</p>
+            {% endif %}
+            {% if organization.services.exists %}
+            <div>
+                <p class="font-semibold mb-2">Services:</p>
+                <ul class="list-disc list-inside space-y-1">
+                    {% for service in organization.services.all %}
+                    <li>{{ service.name }} <span class="text-gray-500">({{ service.category.name }})</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
