@@ -18,7 +18,7 @@ _allowed = os.environ.get('ALLOWED_HOSTS', '')
 ALLOWED_HOSTS = _allowed.split(',') if _allowed else (['*'] if DEBUG else [])
 
 _origins = os.environ.get('ALLOWED_ORIGINS', '')
-CSRF_TRUSTED_ORIGINS = _origins.split(',') if _origins else (['*'] if DEBUG else [])
+CSRF_TRUSTED_ORIGINS = _origins.split(',') if _origins else []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -56,6 +56,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
                 'constance.context_processors.config',
             ],
         },
@@ -113,8 +114,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 
+CONSTANCE_ADDITIONAL_FIELDS = {
+    'image_field': ['django.forms.ImageField', {'required': False}]
+}
+
 CONSTANCE_CONFIG = {
     'COMMUNITY_NAME': ('Community Resource Directory', 'The name of the community'),
+    'TAGLINE': ('Discover local organizations offering helpful services to our community', 'Hero tagline text'),
     'PRIMARY_COLOR': ('#0d6efd', 'Primary color (hex)'),
     'SECONDARY_COLOR': ('#6c757d', 'Secondary color (hex)'),
+    'BANNER_IMAGE': ('', 'Banner/hero image (upload or leave empty for gradient)', 'image_field'),
+    'FAVICON': ('', 'Favicon icon (upload or leave empty)', 'image_field'),
+}
+
+CONSTANCE_CONFIG_FIELDSETS = {
+    'Branding': ('COMMUNITY_NAME', 'TAGLINE', 'PRIMARY_COLOR', 'SECONDARY_COLOR'),
+    'Images': ('BANNER_IMAGE', 'FAVICON'),
 }
