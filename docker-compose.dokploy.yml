@@ -4,6 +4,7 @@ services:
     command: ["/app/entrypoint.sh"]
     volumes:
       - staticfiles:/app/staticfiles
+      - mediafiles:/app/media
     networks:
       - dokploy-network
     ports:
@@ -26,6 +27,7 @@ services:
 
 volumes:
   staticfiles:
+  mediafiles:
 
 networks:
   dokploy-network:
