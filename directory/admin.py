@@ -28,4 +28,4 @@ class OrganizationAdmin(admin.ModelAdmin):
     search_fields = ['name', 'address', 'email']
     filter_horizontal = ['services']
     actions = [approve_organizations]
-    readonly_fields = ['submitted_at']
+    readonly_fields = ['slug', 'submitted_at']
