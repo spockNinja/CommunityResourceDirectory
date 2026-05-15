@@ -11,7 +11,7 @@ services:
     environment:
       # Required: set these in Dokploy's environment variable dashboard
       SECRET_KEY: ${SECRET_KEY}
-      DEBUG: "False"
+      DEBUG: ${DEBUG:-False}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS}
       DB_ENGINE: django.db.backends.postgresql
       DB_NAME: ${DB_NAME:-community_resource_directory}
