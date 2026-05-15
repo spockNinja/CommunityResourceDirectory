@@ -13,6 +13,7 @@ services:
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: ${DEBUG:-False}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
       DB_ENGINE: django.db.backends.postgresql
       DB_NAME: ${DB_NAME:-community_resource_directory}
       DB_USER: ${DB_USER:-postgres}
