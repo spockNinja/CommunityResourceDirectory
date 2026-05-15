@@ -16,7 +16,7 @@
 
         <div class="space-y-3 text-gray-700">
             {% if organization.address %}
-            <p><span class="font-semibold">Address:</span> {{ organization.address }}</p>
+            <p><span class="font-semibold">Address:</span> <a href="https://maps.google.com/?q={{ organization.address|urlencode }}" target="_blank" rel="noopener noreferrer" class="text-primary-brand hover:underline">{{ organization.address }}</a></p>
             {% endif %}
             {% if organization.phone %}
             <p><span class="font-semibold">Phone:</span> <a href="tel:{{ organization.phone }}" class="text-primary-brand hover:underline">{{ organization.phone }}</a></p>
