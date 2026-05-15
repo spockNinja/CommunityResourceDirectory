@@ -15,6 +15,9 @@ class OrganizationSubmitForm(forms.ModelForm):
     class Meta:
         model = Organization
         fields = ['name', 'address', 'phone', 'email', 'website', 'image', 'hours_of_operation', 'services']
+        labels = {
+            'name': 'Organization Name'
+        }
         widgets = {
             'name': forms.TextInput(attrs={'class': TAILWIND_INPUT_CLASSES}),
             'address': forms.TextInput(attrs={'class': TAILWIND_INPUT_CLASSES}),
