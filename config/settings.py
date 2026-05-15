@@ -17,6 +17,9 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 _allowed = os.environ.get('ALLOWED_HOSTS', '')
 ALLOWED_HOSTS = _allowed.split(',') if _allowed else (['*'] if DEBUG else [])
 
+_origins = os.environ.get('ALLOWED_ORIGINS', '')
+CSRF_ALLOWED_ORIGINS = _origins.split(',') if _origins else (['*'] if DEBUG else [])
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
