@@ -18,12 +18,8 @@ def index(request):
         if services_with_orgs:
             category_data.append({'category': category, 'services': services_with_orgs})
 
-    # Also collect approved orgs not linked to any service
-    uncategorized = Organization.objects.filter(approved=True, services__isnull=True)
-
     return render(request, 'directory/index.html', {
         'category_data': category_data,
-        'uncategorized': uncategorized,
     })
 
 
