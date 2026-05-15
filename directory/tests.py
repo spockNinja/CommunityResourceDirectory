@@ -5,6 +5,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test.utils import override_settings
+from django.conf import settings
 from .models import Category, Service, Organization
 
 TEST_MEDIA_ROOT = tempfile.mkdtemp()
@@ -170,3 +171,18 @@ class OrganizationDetailViewTests(TestCase):
         second = Organization.objects.create(name='Duplicate Name')
         self.assertEqual(first.slug, 'duplicate-name')
         self.assertEqual(second.slug, 'duplicate-name-2')
+
+
+class StaticFilesConfigTests(TestCase):
+    def test_whitenoise_middleware_is_enabled_after_security_middleware(self):
+        security_index = settings.MIDDLEWARE.index('django.middleware.security.SecurityMiddleware')
+        self.assertEqual(
+            settings.MIDDLEWARE[security_index + 1],
+            'whitenoise.middleware.WhiteNoiseMiddleware',
+        )
+
+    def test_staticfiles_storage_uses_whitenoise_manifest_storage(self):
+        self.assertEqual(
+            settings.STORAGES['staticfiles']['BACKEND'],
+            'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        )
