@@ -212,6 +212,13 @@ class OrganizationSearchApiTests(TestCase):
         payload = response.json()
         self.assertEqual(payload['results'][0]['services'], ['Pantry'])
 
+    @override_settings(ELASTICSEARCH_URL='')
+    def test_search_api_empty_query_lists_approved_organizations(self):
+        response = self.client.get(reverse('organization_search_api'))
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual([result['name'] for result in payload['results']], ['Community Pantry'])
+
 
 class OrganizationSearchSignalTests(TestCase):
     def setUp(self):
