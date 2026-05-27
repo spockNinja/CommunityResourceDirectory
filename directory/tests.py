@@ -1,5 +1,6 @@
 import shutil
 import tempfile
+from unittest.mock import patch
 
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -186,3 +187,51 @@ class StaticFilesConfigTests(TestCase):
             settings.STORAGES['staticfiles']['BACKEND'],
             'whitenoise.storage.CompressedManifestStaticFilesStorage',
         )
+
+
+class OrganizationSearchApiTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.category = Category.objects.create(name='Food')
+        self.service = Service.objects.create(name='Pantry', category=self.category)
+        self.approved_org = Organization.objects.create(name='Community Pantry', approved=True)
+        self.approved_org.services.add(self.service)
+        self.unapproved_org = Organization.objects.create(name='Hidden Pantry', approved=False)
+        self.unapproved_org.services.add(self.service)
+
+    @override_settings(ELASTICSEARCH_URL='')
+    def test_search_api_returns_only_approved_matches(self):
+        response = self.client.get(reverse('organization_search_api'), {'q': 'pantry'})
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual([result['name'] for result in payload['results']], ['Community Pantry'])
+
+    @override_settings(ELASTICSEARCH_URL='')
+    def test_search_api_includes_services(self):
+        response = self.client.get(reverse('organization_search_api'), {'q': 'pantry'})
+        payload = response.json()
+        self.assertEqual(payload['results'][0]['services'], ['Pantry'])
+
+
+class OrganizationSearchSignalTests(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(name='Health')
+        self.service = Service.objects.create(name='Clinic', category=self.category)
+
+    def test_create_triggers_indexing(self):
+        with patch('directory.signals.index_organization') as index_organization:
+            organization = Organization.objects.create(name='Signal Org')
+        index_organization.assert_called_once_with(organization)
+
+    def test_update_triggers_indexing(self):
+        organization = Organization.objects.create(name='Signal Org')
+        with patch('directory.signals.index_organization') as index_organization:
+            organization.name = 'Updated Signal Org'
+            organization.save()
+        index_organization.assert_called_once_with(organization)
+
+    def test_service_changes_trigger_indexing(self):
+        organization = Organization.objects.create(name='Signal Org')
+        with patch('directory.signals.index_organization') as index_organization:
+            organization.services.add(self.service)
+        index_organization.assert_called_once_with(organization)

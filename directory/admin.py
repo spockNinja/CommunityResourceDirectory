@@ -16,7 +16,9 @@ class ServiceAdmin(admin.ModelAdmin):
 
 
 def approve_organizations(modeladmin, request, queryset):
-    queryset.update(approved=True)
+    for organization in queryset:
+        organization.approved = True
+        organization.save(update_fields=['approved'])
 
 approve_organizations.short_description = 'Approve selected organizations'
 
