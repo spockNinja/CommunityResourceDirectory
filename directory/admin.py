@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Category, Service, Organization
+from .search import index_organization, refresh_organization_index
 
 
 @admin.register(Category)
@@ -16,7 +17,11 @@ class ServiceAdmin(admin.ModelAdmin):
 
 
 def approve_organizations(modeladmin, request, queryset):
+    # queryset.update() bypasses model save signals, so index manually afterward.
     queryset.update(approved=True)
+    for organization in queryset:
+        index_organization(organization, refresh=False)
+    refresh_organization_index()
 
 approve_organizations.short_description = 'Approve selected organizations'
 

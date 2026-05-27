@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'constance',
     'constance.backends.database',
-    'directory',
+    'directory.apps.DirectoryConfig',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +131,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
     'Branding': ('COMMUNITY_NAME', 'TAGLINE', 'PRIMARY_COLOR', 'SECONDARY_COLOR'),
     'Images': ('BANNER_IMAGE', 'FAVICON'),
 }
+
+ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL', '')
+ELASTICSEARCH_INDEX = os.environ.get('ELASTICSEARCH_INDEX', 'organizations')
